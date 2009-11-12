@@ -1,13 +1,13 @@
 use strict;
 use warnings;
-use Test::More tests => 9;
+use Test::More tests => 59;
 
 use_ok 'Crypt::Blowfish::Mod';
 
 my $str = "You're the man now, dog";
 
 {
-	my $long_key = 'a' x 270;
+	my $long_key = 'a' x 256;
 	ok( my $cipher = new Crypt::Blowfish::Mod( key_raw=>$long_key ), 'long key instance' );
 	my $out = $cipher->encrypt($str);
 }
@@ -33,5 +33,16 @@ my $str = "You're the man now, dog";
 	my $data = $cipher->decrypt($out);
 	#warn ">>>>>>>>>>$data<<<<<<<<<<<<<";
 	ok( $data eq $str, 'decrypt' );
+}
+{
+	my $cipher = new Crypt::Blowfish::Mod( 'MTIzNDU2' );
+
+	my $str;
+	for( 1..50 ) {
+		$str .= ( 'x' x 1000 ) x $_;
+		my $out = $cipher->encrypt($str);
+		my $data = $cipher->decrypt($out);
+		ok( $data eq $str, 'decrypt large str ' . $_ );
+	}
 }
 
