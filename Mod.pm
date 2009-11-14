@@ -15,7 +15,7 @@ sub new {
 	my $class = shift;
 	my %p = @_ == 1 ? ( key=>shift ) : ( @_ );
 
-	confess "Missing key=>'' or key=>'' parameter to $class->new()" unless( $p{key} || $p{key_raw} );
+	confess "Missing 'key' parameter to $class->new()" unless( $p{key} || $p{key_raw} );
 
 	my $endianness = $p{endianness} || $class->_detect_endianness;
 	my $key = $p{key_raw} || MIME::Base64::decode_base64( $p{key} );
@@ -31,14 +31,14 @@ sub _is_big_endian {
 	return $self->{endianness} eq 'little' ? 0 : 1;
 }
 
-sub _encrypt64 {
+sub encrypt_raw {
 	my ($self, $str ) = @_;
-    return MIME::Base64::encode_base64($self->encrypt($str), '');
+    return MIME::Base64::decode_base64($self->encrypt($str));
 }
 
-sub _decrypt64 {
+sub decrypt_raw {
 	my ($self, $str ) = @_;
-    $self->decrypt( MIME::Base64::decode_base64($str) );
+    $self->decrypt( MIME::Base64::encode_base64($str, '') );
 }
 
 sub encrypt {
@@ -72,8 +72,11 @@ Crypt::Blowfish::Mod - Another Blowfish Algorithm
 Crypt::Blowfish::Mod implements the Blowfish algorithm using functions adapted from examples from Bruce Schneier
 and other authors. 
 
-Crypt::Blowfish::Mod has an interface similar to Crypt::Blowfish, but produces different results. Also, this 
-module accepts variable length keys upt to 256 bytes. 
+Crypt::Blowfish::Mod has an interface similar to L<Crypt::Blowfish>, but produces different results. This module
+is endianness sensitive, making sure that it gives the same encription/decription results in different architectures.
+
+Also, this module accepts variable length keys up to 256 bytes. By default, it assumes the C<key> is a Base64
+string. And all text encrypted or decrypted is also in Base64. 
 
 =head1 METHODS
 
@@ -85,29 +88,42 @@ Usage:
     my $b = Crypt::Blowfish::Mod->new('YaKjsKjY0./');
 
     ## or use a raw key:
-    my $b = Crypt::Blowfish::Mod->new( key_raw=>'this_is_a_raw_key9kdjf29389238928938' );
+    my $b = Crypt::Blowfish::Mod->new( key_raw=>'this_is_a_raw_key9k&$!djf29389238928938' );
 
     my $enc = $b->encrypt( 'secret text' ); 
     my $dec = $b->decrypt( $enc );
 
-Or just call it raw:
+If you prefer, work with raw encrypted strings:
 
-    my $enc = Crypt::Blowfish::Mod::b_encrypt( $key, $str );
-    my $dec = Crypt::Blowfish::Mod::b_decrypt( $key, $enc );
+    my $enc = $b->encrypt_raw( 'secret text' ); 
+    my $dec = $b->decrypt_raw( $enc );
+
+Or just call it even more raw (Big Endian):
+
+    my $enc = Crypt::Blowfish::Mod::b_encrypt( $key, $str, 1 );
+    my $dec = Crypt::Blowfish::Mod::b_decrypt( $key, $enc, 1 );
 
 =head2 encrypt
 
-Returns a base64 encrypted string.
+Returns a encrypted string encoded in Base64.
 
 =head2 decrypt
 
 Decodes a base64 encoded blowfish encrypted string.
 
-=head2 b_encrypt
+=head2 encrypt_raw
+
+Returns a raw encrypted string.
+
+=head2 decrypt_raw
+
+Decodes a raw encoded blowfish encrypted string.
+
+=head2 b_encrypt( Str $text, Str $key, Bool is_big_endian )
 
 Raw C decrypt function.
 
-=head2 b_decrypt
+=head2 b_decrypt( Str $text, Str $key, Bool is_big_endian )
 
 Raw C decrypt function.
 
@@ -127,6 +143,8 @@ Intel-based architectures are typically Little-Endian.
 =head1 SEE ALSO
 
 L<Crypt::Blowfish>
+
+L<Crypt::OpenSSL::Blowfish>
 
 This algorithm has been implemented in other languages:
 

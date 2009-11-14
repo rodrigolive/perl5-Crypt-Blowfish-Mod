@@ -1,6 +1,6 @@
 use strict;
 use warnings;
-use Test::More tests => 59;
+use Test::More tests => 61;
 
 use_ok 'Crypt::Blowfish::Mod';
 
@@ -34,6 +34,8 @@ my $str = "You're the man now, dog";
 	#warn ">>>>>>>>>>$data<<<<<<<<<<<<<";
 	ok( $data eq $str, 'decrypt' );
 }
+
+# Size stress tests
 {
 	my $cipher = new Crypt::Blowfish::Mod( 'MTIzNDU2' );
 
@@ -44,5 +46,13 @@ my $str = "You're the man now, dog";
 		my $data = $cipher->decrypt($out);
 		ok( $data eq $str, 'decrypt large str ' . $_ );
 	}
+}
+
+# Raw tests
+{
+	ok( my $cipher = new Crypt::Blowfish::Mod( key_raw=>'lkdjflkajsldkfj03804223$=(/)/(1lkjl' ), 'raw key created' );
+	my $out = $cipher->encrypt_raw($str);
+	my $data = $cipher->decrypt_raw($out);
+	ok( $data eq $str, 'decrypt raw' );
 }
 
