@@ -9,14 +9,14 @@ PROTOTYPES: DISABLE
 
 char *
 b_encrypt (key, str, big)
-    unsigned char *key 
-    char *str 
-	short big
+    unsigned char *key
+    char *str
+    short big
 
 char *
 b_decrypt (key, str, big)
-    unsigned char *key 
-    char *str 
-	short big
+    unsigned char *key
+    char *str
+    short big
 
 
