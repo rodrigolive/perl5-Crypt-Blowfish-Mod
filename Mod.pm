@@ -66,6 +66,8 @@ __END__
 
 Crypt::Blowfish::Mod - Another Blowfish Algorithm
 
+=encoding utf8
+
 =head1 VERSION
 
 version 0.05
@@ -187,6 +189,6 @@ http://www.schneier.com/blowfish-download.html
 
 =head1 AUTHOR
 
-Rodrigo de Oliveira, E<lt>rodrigo@cpan.orgE<gt>
+Rodrigo de Oliveira
 
 =cut

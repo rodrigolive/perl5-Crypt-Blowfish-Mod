@@ -123,4 +123,4 @@ http://www.schneier.com/blowfish-download.html
 
 # AUTHOR
 
-Rodrigo de Oliveira, <rodrigo@cpan.org>
+Rodrigo de Oliveira
