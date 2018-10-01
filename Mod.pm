@@ -128,6 +128,10 @@ Decodes a base64 encoded blowfish encrypted string.
 
 Returns a raw encrypted string.
 
+=head2 decrypt_raw
+
+Decodes a raw encoded blowfish encrypted string.
+
 =head2 encrypt_legacy
 
 This is the legacy C<encrypt> method, which behaves like C<encrypt()> in
@@ -151,10 +155,6 @@ as the old version did, use this method.
     my $enc = $b->encrypt_legacy( 'déjà-vu' );
     my $dec = $b->decrypt( $enc );
     is( $enc, $dec );  # not!
-
-=head2 decrypt_raw
-
-Decodes a raw encoded blowfish encrypted string.
 
 =head2 b_encrypt( Str $text, Str $key, Bool is_big_endian, Bool is_signed )
 

@@ -62,6 +62,10 @@ Decodes a base64 encoded blowfish encrypted string.
 
 Returns a raw encrypted string.
 
+## decrypt\_raw
+
+Decodes a raw encoded blowfish encrypted string.
+
 ## encrypt\_legacy
 
 This is the legacy `encrypt` method, which behaves like `encrypt()` in
@@ -85,10 +89,6 @@ as the old version did, use this method.
     my $enc = $b->encrypt_legacy( 'déjà-vu' );
     my $dec = $b->decrypt( $enc );
     is( $enc, $dec );  # not!
-
-## decrypt\_raw
-
-Decodes a raw encoded blowfish encrypted string.
 
 ## b\_encrypt( Str $text, Str $key, Bool is\_big\_endian, Bool is\_signed )
 
