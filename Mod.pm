@@ -1,4 +1,6 @@
 package Crypt::Blowfish::Mod;
+our $VERSION = '0.05';
+
 use strict;
 use warnings;
 use Carp;
@@ -43,7 +45,12 @@ sub decrypt_raw {
 
 sub encrypt {
     my ($self, $str ) = @_;
-    return Crypt::Blowfish::Mod::b_encrypt( $self->{key}, $str, $self->_is_big_endian )
+    return Crypt::Blowfish::Mod::b_encrypt( $self->{key}, $str, $self->_is_big_endian, 0 )
+}
+
+sub encrypt_legacy {
+    my ($self, $str ) = @_;
+    return Crypt::Blowfish::Mod::b_encrypt( $self->{key}, $str, $self->_is_big_endian, 1 )
 }
 
 sub decrypt {
@@ -58,6 +65,10 @@ __END__
 =head1 NAME
 
 Crypt::Blowfish::Mod - Another Blowfish Algorithm
+
+=head1 VERSION
+
+version 0.05
 
 =head1 SYNOPSIS
 
@@ -115,15 +126,39 @@ Decodes a base64 encoded blowfish encrypted string.
 
 Returns a raw encrypted string.
 
+=head2 encrypt_legacy
+
+This is the legacy C<encrypt> method, which behaves like C<encrypt()> in
+version C<0.04> and earlier.
+
+Before C<0.05> encryption was performed by the XS module using C's signed
+chars. This is a bug that prevented utf-8 strings from being decrypted.
+This bug was solved in C<0.05>.
+
+So, if you updated to version C<0.05> or greater and still need to encrypt data
+as the old version did, use this method.
+
+    # works fine
+
+    my $enc = $b->encrypt_legacy( 'secret text' );
+    my $dec = $b->decrypt( $enc );
+    is( $enc, $dec );
+
+    # fails!
+
+    my $enc = $b->encrypt_legacy( 'déjà-vu' );
+    my $dec = $b->decrypt( $enc );
+    is( $enc, $dec );  # not!
+
 =head2 decrypt_raw
 
 Decodes a raw encoded blowfish encrypted string.
 
-=head2 b_encrypt( Str $text, Str $key, Bool is_big_endian )
+=head2 b_encrypt( Str $text, Str $key, Bool is_big_endian, Bool is_signed )
 
 Raw C decrypt function.
 
-=head2 b_decrypt( Str $text, Str $key, Bool is_big_endian )
+=head2 b_decrypt( Str $text, Str $key, Bool is_big_endian, Bool is_signed )
 
 Raw C decrypt function.
 
@@ -155,4 +190,3 @@ http://www.schneier.com/blowfish-download.html
 Rodrigo de Oliveira, E<lt>rodrigo@cpan.orgE<gt>
 
 =cut
-

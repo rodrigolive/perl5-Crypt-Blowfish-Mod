@@ -571,11 +571,14 @@ int base64dec (char c)
     return 0;
 }
 
-char *b_encrypt (UBYTE_08bits *key, char *str, short big)
+char *b_encrypt (UBYTE_08bits *key, char *str, short big, short b_signed)
 {
     UWORD_32bits left, right;
     char *p, *s, *dest, *d;
     int i;
+
+    if(!b_signed)
+        b_signed = 0;
 
     dest = (char *) malloc((strlen(str) + 9) * 2);
     s = (char *) malloc(strlen(str) + 9);
@@ -594,15 +597,15 @@ char *b_encrypt (UBYTE_08bits *key, char *str, short big)
     d = dest;
 
     while (*p) {
-        left = ((*p++) << 24);
-        left += ((*p++) << 16);
-        left += ((*p++) << 8);
-        left += (*p++);
+        left   = (( b_signed == 0 ? (unsigned char)(*p++) : (*p++) ) << 24);
+        left  += (( b_signed == 0 ? (unsigned char)(*p++) : (*p++) ) << 16);
+        left  += (( b_signed == 0 ? (unsigned char)(*p++) : (*p++) ) << 8);
+        left  +=  ( b_signed == 0 ? (unsigned char)(*p++) : (*p++) );
 
-        right = ((*p++) << 24);
-        right += ((*p++) << 16);
-        right += ((*p++) << 8);
-        right += (*p++);
+        right  = (( b_signed == 0 ? (unsigned char)(*p++) : (*p++) ) << 24);
+        right += (( b_signed == 0 ? (unsigned char)(*p++) : (*p++) ) << 16);
+        right += (( b_signed == 0 ? (unsigned char)(*p++) : (*p++) ) << 8);
+        right +=  ( b_signed == 0 ? (unsigned char)(*p++) : (*p++) );
 
         if( big == 1 )
             encipher_big(&left, &right);
@@ -651,6 +654,7 @@ char *b_decrypt (UBYTE_08bits *key, char *str, short big)
 
         for (i = 0; i < 6; i++)
             right |= (base64dec(*p++)) << (i * 6);
+
         for (i = 0; i < 6; i++)
             left |= (base64dec(*p++)) << (i * 6);
 
