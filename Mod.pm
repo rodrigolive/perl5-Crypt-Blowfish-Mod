@@ -98,7 +98,10 @@ string. And all text encrypted or decrypted is also in Base64.
 Usage:
 
     ## the key should be base64
-    my $b = Crypt::Blowfish::Mod->new('YaKjsKjY0./');
+    my $b = Crypt::Blowfish::Mod->new('YaKjsKjY0+');
+
+    ## same as before:
+    my $b = Crypt::Blowfish::Mod->new( key => 'YaKjsKjY0+');
 
     ## or use a raw key:
     my $b = Crypt::Blowfish::Mod->new( key_raw=>'this_is_a_raw_key9k&$!djf29389238928938' );
@@ -152,9 +155,10 @@ as the old version did, use this method.
 
     # fails!
 
-    my $enc = $b->encrypt_legacy( 'déjà-vu' );
+    my $str = 'déjà-vu';
+    my $enc = $b->encrypt_legacy( $str );
     my $dec = $b->decrypt( $enc );
-    is( $enc, $dec );  # not!
+    is( $str, $dec );  # not!
 
 =head2 b_encrypt( Str $text, Str $key, Bool is_big_endian, Bool is_signed )
 

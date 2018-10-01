@@ -17,7 +17,7 @@ subtest 'long raw key' => sub {
 subtest 'strange raw key works' => sub {
     ok(
         my $cipher = new Crypt::Blowfish::Mod(
-            key_raw => 'sdoifuowerjle8784371oiojlkfjsldkfj./565719.")o832948'
+            key_raw => 'sdoifuowerjle8784371oiojlkfjsldkfj+/565719.")o832948'
         ),
         'created'
     );
