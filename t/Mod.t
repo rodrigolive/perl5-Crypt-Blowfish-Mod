@@ -23,7 +23,7 @@ subtest 'strange raw key works' => sub {
     );
     my $out = $cipher->encrypt( $str );
 
-    is( $out, 'dE4MRDH/6/gCPGaqWCMRIeOAeLMuqB+nyI8C', 'encrypt' );
+    is( $out, 'OA4hPAuNesKCRnsXsBBquDPA1cx1vCXSxlnC', 'encrypt' );
 };
 
 subtest 'b64 encrypt' => sub {
