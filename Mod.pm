@@ -181,6 +181,23 @@ You may override this behavior by setting the endianness on instantiation:
 
 Intel-based architectures are typically Little-Endian.
 
+=head1 BREAKING CHANGES
+
+Version 0.05 contains breaking changes.
+
+Previous to version C<0.05> any strings containing utf-8 or extended ascii
+characters were not encrypted correctly.
+
+If you were storing encrypted utf8 strings but not decrypting them with earlier
+versions (C<0.04> or before), if you try to compare the output of the older
+encrypt() and the current (fixed) encrypt() method the result will not match!
+They do match fine if no utf8 or extended ascii codes were in the string being
+encrypted. This may be a problem if you were storing encrypted data, then
+comparing them to validate, authenticate, etc.
+
+Use C<encrypt_legacy()> if you still need to encrypt data that outputs strings
+that match the old algorithm.
+
 =head1 SEE ALSO
 
 L<Crypt::Blowfish>
