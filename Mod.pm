@@ -208,6 +208,10 @@ This algorithm has been implemented in other languages:
 
 http://www.schneier.com/blowfish-download.html
 
+=head1 CONTRIBUTORS
+
+Mohammad S Anwar <mohammad.anwar@yahoo.com>
+
 =head1 AUTHOR
 
 Rodrigo de Oliveira

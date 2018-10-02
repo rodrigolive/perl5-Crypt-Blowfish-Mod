@@ -142,6 +142,10 @@ This algorithm has been implemented in other languages:
 
 http://www.schneier.com/blowfish-download.html
 
+# CONTRIBUTORS
+
+Mohammad S Anwar <mohammad.anwar@yahoo.com>
+
 # AUTHOR
 
 Rodrigo de Oliveira
